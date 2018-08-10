@@ -1,0 +1,6 @@
+folderGame=stranger-stuff
+GameStoryLine=com.stranger.gameplay.impl.DefaultGamePlay
+ItemGenerator=com.stranger.items.impl.DefaultGamePlayItemGenerator
+FightEvents=com.stranger.events.impl.DefaultGamePlayFightEvents
+ExplorationEvents=com.stranger.events.impl.DefaultGamePlayExplorationEvents
+GameState=com.stranger.state.impl.DefaultGamePlayState
