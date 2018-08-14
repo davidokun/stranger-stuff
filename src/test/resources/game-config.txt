@@ -1,0 +1,2 @@
+School,Woods,Upside-Down
+School-Boy,10,Book,10,10|Lab-Man,45,Taser,20,20
