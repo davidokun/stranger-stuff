@@ -184,5 +184,109 @@ public class DefaultGamePlayTest {
         assertTrue(result);
 
     }
+	
+	    @Test
+    public void should_Explore_With_Move_Event_And_Keep_Exploring() {
 
+        Stage stage = new Stage();
+        StageMap stageMap = new StageMap();
+        GamePlayer gamePlayer = new GamePlayer();
+
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.print(GREEN, "What you want to do?:\n1. Search\n2. Move.\n3. Save\n");
+
+        PowerMockito.when(ConsoleManager.read()).thenReturn("2");
+
+        Mockito.when(explorationEvents.move(stageMap, gamePlayer)).thenReturn(true);
+
+        boolean result = defaultGamePlay.explore(stage, stageMap, gamePlayer, 1, 1);
+
+        Mockito.verify(explorationEvents, times(1)).move(stageMap, gamePlayer);
+        PowerMockito.verifyStatic(VerificationModeFactory.times(1));
+
+        assertTrue(result);
+
+    }
+
+    @Test
+    public void should_Explore_With_Move_Event_And_Stop_Exploring() {
+
+        Stage stage = new Stage();
+        StageMap stageMap = new StageMap();
+        GamePlayer gamePlayer = new GamePlayer();
+
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.print(GREEN, "What you want to do?:\n1. Search\n2. Move.\n3. Save\n");
+
+        PowerMockito.when(ConsoleManager.read()).thenReturn("2");
+
+        Mockito.when(explorationEvents.move(stageMap, gamePlayer)).thenReturn(false);
+
+        boolean result = defaultGamePlay.explore(stage, stageMap, gamePlayer, 1, 1);
+
+        Mockito.verify(explorationEvents, times(1)).move(stageMap, gamePlayer);
+        PowerMockito.verifyStatic(VerificationModeFactory.times(1));
+
+        assertFalse(result);
+
+    }
+
+    @Test
+    public void should_Save_Game_And_Keep_Exploring() {
+
+        Stage stage = new Stage();
+        StageMap stageMap = new StageMap();
+        GamePlayer gamePlayer = new GamePlayer();
+
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.print(GREEN, "What you want to do?:\n1. Search\n2. Move.\n3. Save\n");
+
+        PowerMockito.when(ConsoleManager.read()).thenReturn("3");
+
+        Mockito.when(gamePlayState.save(1, 1, gamePlayer)).thenReturn(true);
+
+        boolean result = defaultGamePlay.explore(stage, stageMap, gamePlayer, 1, 1);
+
+        Mockito.verify(gamePlayState, times(1)).save(1,1, gamePlayer);
+        PowerMockito.verifyStatic(VerificationModeFactory.times(1));
+
+        assertTrue(result);
+
+    }
+
+    @Test
+    public void should_Should_Show_Default_Message_And_Keep_Exploring() {
+
+        Stage stage = new Stage();
+        StageMap stageMap = new StageMap();
+        GamePlayer gamePlayer = new GamePlayer();
+
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.print(GREEN, "What you want to do?:\n1. Search\n2. Move.\n3. Save\n");
+        ConsoleManager.print(RED, "Please select option (1, 2 or 3)");
+
+        PowerMockito.when(ConsoleManager.read()).thenReturn("4");
+
+        boolean result = defaultGamePlay.explore(stage, stageMap, gamePlayer, 1, 1);
+
+        PowerMockito.verifyStatic(VerificationModeFactory.times(2));
+
+        assertTrue(result);
+
+    }
+
+    @Test
+    public void should_Get_Indexes_From_A_Save_State() {
+        when(gamePlayState.getStageSate()).thenReturn(new StringBuilder("1|2"));
+
+        int[] result = defaultGamePlay.recreateGameState();
+
+        Mockito.verify(gamePlayState, times(1)).getStageSate();
+        assertEquals(1, result[0]);
+        assertEquals(2, result[1]);
+    }
 }
