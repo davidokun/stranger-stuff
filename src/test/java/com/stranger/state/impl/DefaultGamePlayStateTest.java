@@ -54,4 +54,24 @@ public class DefaultGamePlayStateTest {
         assertTrue(saved);
     }
 
+    @Test
+    public void should_Load_Game_State() throws IOException {
+
+        Path newPath = Paths.get("stage-save.ser");
+
+        PowerMockito.mockStatic(Files.class);
+        PowerMockito.when(
+                Files.write(newPath, "1|1".getBytes())
+        ).thenReturn(newPath);
+
+        boolean saved = gamePlayState.save(1, 1, player);
+
+        GameState gameState = gamePlayState.load();
+
+        assertNotNull(gameState);
+        assertNotNull(gameState.getPlayer());
+        assertEquals("Will", gameState.getPlayer().getName());
+        assertEquals("16", gameState.getPlayer().getAge());
+        assertEquals("1|1", gameState.getStageSate().toString());
+    }
 }
