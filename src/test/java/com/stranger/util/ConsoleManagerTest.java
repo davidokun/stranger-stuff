@@ -51,4 +51,31 @@ public class ConsoleManagerTest {
 
     }
 
+    @Test
+    public void should_Catch_Interrupted_Exception() throws InterruptedException {
+
+        PowerMockito.mockStatic(Thread.class);
+        PowerMockito.doThrow(new InterruptedException()).when(Thread.class);
+        Thread.sleep(100);
+
+        InputStream is = new ByteArrayInputStream( "Hello World %s".getBytes() );
+        ConsoleManager.printScrollableText(ConsoleManager.WHITE, is, 100, "David");
+
+        PowerMockito.verifyStatic(VerificationModeFactory.times(1));
+        ConsoleManager.print(ConsoleManager.RED, "There was an error printing the scrollable text");
+
+    }
+
+    @Test
+    public void should_Catch_IOException_Exception() throws IOException {
+
+        Mockito.doThrow(new IOException()).when(bufferedReader).readLine();
+
+        InputStream is = new ByteArrayInputStream( "Hello World %s".getBytes() );
+        ConsoleManager.printScrollableText(ConsoleManager.WHITE, is, 100, "David");
+
+        PowerMockito.verifyStatic(VerificationModeFactory.times(1));
+        ConsoleManager.print(ConsoleManager.WHITE, "There was an error printing the scrollable text with the Buffer");
+
+    }
 }
