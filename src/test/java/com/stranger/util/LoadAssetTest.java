@@ -67,4 +67,56 @@ public class LoadAssetTest {
         assertEquals(84, newInputStream.read());
     }
 
+    @Test
+    public void should_Load_Stages_Assets() {
+
+        LoadAsset.gameConfig[0] = "School,Woods,Upside-Down";
+
+        String folderName = "stranger-stuff";
+        List<Stage> stages = loadAsset.loadStageAssets(folderName);
+
+        assertNotNull(stages);
+        assertEquals(3, stages.size());
+        assertEquals("School", stages.get(0).getStageName());
+        assertEquals("Woods", stages.get(1).getStageName());
+        assertEquals("Upside-Down", stages.get(2).getStageName());
+    }
+
+    @Test
+    public void should_Load_Map_Stages_Assets() {
+
+        LoadAsset.gameConfig[0] = "School,Woods,Upside-Down";
+
+        String folderName = "stranger-stuff";
+        List<Stage> stages = loadAsset.loadStageAssets(folderName);
+
+        assertNotNull(stages);
+        assertEquals(3, stages.size());
+        assertEquals("school-1", stages.get(0).getMaps().get(0).getMapName());
+        assertEquals("woods-1", stages.get(1).getMaps().get(0).getMapName());
+        assertEquals("upside-down-1", stages.get(2).getMaps().get(0).getMapName());
+
+    }
+
+    @Test
+    public void should_Load_Enemy_Assets() {
+
+        LoadAsset.gameConfig[1] = "School-Boy,10,Book,10,10|Lab-Man,45,Taser,20,20";
+
+        List<Player> enemies = loadAsset.loadEnemyAssets();
+
+        assertNotNull(enemies);
+        assertEquals(2, enemies.size());
+        assertEquals("School-Boy", enemies.get(0).getName());
+        assertEquals("10", enemies.get(0).getAge());
+        assertEquals("Book", enemies.get(0).getWeapon());
+        assertEquals(10, enemies.get(0).getExperience());
+        assertEquals(10, enemies.get(0).getLife());
+
+        assertEquals("Lab-Man", enemies.get(1).getName());
+        assertEquals("45", enemies.get(1).getAge());
+        assertEquals("Taser", enemies.get(1).getWeapon());
+        assertEquals(20, enemies.get(1).getExperience());
+        assertEquals(20, enemies.get(1).getLife());
+    }
 }
