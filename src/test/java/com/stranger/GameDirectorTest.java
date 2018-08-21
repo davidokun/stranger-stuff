@@ -97,5 +97,60 @@ public class GameDirectorTest {
         ConsoleManager.print(GREEN, "Tanks for Playing!!! ");
     }
 
-    
+    @Test
+    public void should_Make_The_Game_Start_New_Game() {
+
+        LoadAsset loadAsset = new LoadAsset();
+        loadAsset.loadGameConfig(LoadAsset.gameConfig, "game-config.txt");
+        loadAsset.loadGameConfig(LoadAsset.contextConfig, "game-context.txt");
+
+        GamePlayer player = new GamePlayer("Mike", "15");
+        player.setWeapon("Sword");
+
+        Mockito.when(gameStoryLine.explore(stage, stageMap, player, 1, 1))
+                .thenReturn(false);
+
+        Mockito.when(gameStoryLine.setUpStages()).thenReturn(stages);
+
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.print(GREEN, stage.getStageName() + " - " + stageMap.getMapName());
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.printScrollableText(PURPLE, stageMap.getGraphicArea(), 50);
+
+        gameDirector.gameStart(gameStoryLine, player, false);
+
+    }
+
+    @Test
+    public void should_Make_The_Game_Start_Load_Game() {
+
+        LoadAsset loadAsset = new LoadAsset();
+        loadAsset.loadGameConfig(LoadAsset.gameConfig, "game-config.txt");
+        loadAsset.loadGameConfig(LoadAsset.contextConfig, "game-context.txt");
+
+        GamePlayer player = new GamePlayer("Mike", "15");
+        player.setWeapon("Sword");
+
+        Mockito.when(gameStoryLine.explore(stage, stageMap, player, 1, 1))
+                .thenReturn(false);
+
+        Mockito.when(gameStoryLine.setUpStages()).thenReturn(stages);
+
+        int[] currentState = new int[2];
+        currentState[0] = 1;
+        currentState[1] = 1;
+        Mockito.when(gameStoryLine.recreateGameState()).thenReturn(currentState);
+
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.print(GREEN, stage.getStageName() + " - " + stageMap.getMapName());
+        PowerMockito.mockStatic(ConsoleManager.class);
+        PowerMockito.doNothing().when(ConsoleManager.class);
+        ConsoleManager.printScrollableText(PURPLE, stageMap.getGraphicArea(), 50);
+
+        gameDirector.gameStart(gameStoryLine, player, true);
+
+    }
 }
